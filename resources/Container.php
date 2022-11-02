@@ -7,6 +7,8 @@ class Container
 {
     private array $services = [];
 
+    private static ?Container $instance = null;
+
     public function register(string $name, string $service): void
     {
         $this->services[$name] = $service;
@@ -23,5 +25,19 @@ class Container
             throw new NotRegisteredException($name);
         }
         return $this->services[$name];
+    }
+
+    public static function injector(): Container
+    {
+        if (self::$instance === null) {
+            self::$instance = new self;
+        }
+
+        return self::$instance;
+    }
+
+    public static function setInjector(Container $container): void
+    {
+        self::$instance = $container;
     }
 }

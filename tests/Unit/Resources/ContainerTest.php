@@ -37,4 +37,17 @@ class ContainerTest extends TestCase
         $container = new Container;
         $container->getService('not registered');
     }
+
+    public function testInjectorAsSingleTon()
+    {
+        $this->assertInstanceOf(Container::class, Container::injector());
+        $this->assertSame(Container::injector(), Container::injector());
+    }
+
+    public function testSetInjector()
+    {
+        $container = new Container;
+        Container::setInjector($container);
+        $this->assertSame($container, Container::injector());
+    }
 }
