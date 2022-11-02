@@ -19,6 +19,9 @@ class Container
 
     public function getService(string $name)
     {
+        if (!$this->registered($name)) {
+            throw new NotRegisteredException($name);
+        }
         return $this->services[$name];
     }
 }
