@@ -9,7 +9,12 @@ class Container
 
     private static ?Container $instance = null;
 
-    public function register(string $name, string $service): void
+    /**
+     * @param string $name
+     * @param mixed $service
+     * @return void
+     */
+    public function register(string $name, $service): void
     {
         $this->services[$name] = $service;
     }
@@ -24,6 +29,12 @@ class Container
         if (!$this->registered($name)) {
             throw new NotRegisteredException($name);
         }
+
+        $anonymousFunction = $this->services[$name];
+        if (is_callable($anonymousFunction)) {
+            return $anonymousFunction();
+        }
+
         return $this->services[$name];
     }
 

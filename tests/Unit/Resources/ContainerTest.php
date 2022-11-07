@@ -46,8 +46,20 @@ class ContainerTest extends TestCase
 
     public function testSetInjector()
     {
-        $container = new Container;
+        $container = new Container();
         Container::setInjector($container);
         $this->assertSame($container, Container::injector());
+    }
+
+    public function testRegisteringFunctionAsService()
+    {
+        $container = new Container();
+
+        $container->register('foo', function () {
+
+            return 'this is foo';
+        });
+
+        $this->assertEquals('this is foo', $container->getService('foo'));
     }
 }
