@@ -62,4 +62,16 @@ class ContainerTest extends TestCase
 
         $this->assertEquals('this is foo', $container->getService('foo'));
     }
+
+    public function testRegisteringItSelfAsService()
+    {
+        $container = new Container();
+
+        $container->register('foo', function (?Container $injector = null) use ($container) {
+
+            $this->assertEquals($container, $injector);
+        });
+
+        $container->getService('foo');
+    }
 }

@@ -32,7 +32,7 @@ class Container
 
         $anonymousFunction = $this->services[$name];
         if (is_callable($anonymousFunction)) {
-            return $anonymousFunction();
+            return $anonymousFunction($this);
         }
 
         return $this->services[$name];
