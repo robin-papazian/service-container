@@ -2,6 +2,7 @@
 
 namespace Robin\Resources;
 
+use ReflectionClass;
 
 class Container
 {
@@ -29,7 +30,8 @@ class Container
         if (!$this->registered($name)) {
 
             if (class_exists($name)) {
-                return new $name;
+
+                return $this->buildClass($name);
             }
             throw new NotRegisteredException($name);
         }
@@ -54,5 +56,29 @@ class Container
     public static function setInjector(Container $container): void
     {
         self::$instance = $container;
+    }
+
+    private function buildClass($name)
+    {
+        /**
+         * @var ReflectionClass $bluePrintClass
+         */
+        $bluePrintClass = new \ReflectionClass($name);
+        $bluePrintConstructor = $bluePrintClass->getConstructor();
+
+        $bluePrintParameters = $bluePrintConstructor ? $bluePrintConstructor->getParameters() : [];
+
+        return new $name(...$this->getDependencies($bluePrintParameters));
+    }
+
+    private function getDependencies(array $parameters): array
+    {
+        $dependencies = [];
+        foreach ($parameters as $parameter) {
+
+            $dependencies[$parameter->getPosition()] = $this->getService($parameter->getType()->getName());
+        }
+
+        return $dependencies;
     }
 }

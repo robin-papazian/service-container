@@ -4,10 +4,20 @@ namespace Robin\Tests\Unit\Resources;
 
 require_once __DIR__ . './../../../resources/Container.php';
 require_once __DIR__ . './../../../resources/NotRegisteredException.php';
+require_once __DIR__ . './../../../lib/Service/ServiceNoConstructor.php';
+require_once __DIR__ . './../../../lib/Service/ServiceEmptyConstructor.php';
+require_once __DIR__ . './../../../lib/Service/ServiceWithOneDependency.php';
+require_once __DIR__ . './../../../lib/Service/ServiceMultipleDependecies.php';
+require_once __DIR__ . './../../../lib/Service/ServiceWithNestedDependencies.php';
 
 use Robin\Resources\Container;
 use PHPUnit\Framework\TestCase;
 use Robin\Resources\NotRegisteredException;
+use Service\ServiceEmptyConstructor;
+use Service\ServiceMultipleDependecies;
+use Service\ServiceNoConstructor;
+use Service\ServiceWithNestedDependencies;
+use Service\ServiceWithOneDependency;
 
 class ContainerTest extends TestCase
 {
@@ -80,5 +90,25 @@ class ContainerTest extends TestCase
         $container = new Container();
 
         $this->assertInstanceOf(Container::class, $container->getService(Container::class));
+    }
+
+    /**
+     * @dataProvider myDependencies
+     */
+    public function testResolveDependenciesFromClassNotRegister($instances)
+    {
+        $container = new Container;
+        $this->assertInstanceOf($instances, $container->getService($instances));
+    }
+
+    public function myDependencies()
+    {
+        return [
+            'no constructor' => [ServiceNoConstructor::class],
+            'empty constructor' => [ServiceEmptyConstructor::class],
+            'one dependency' => [ServiceWithOneDependency::class],
+            'multiple depemdencies' => [ServiceMultipleDependecies::class],
+            'nested dependencies' => [ServiceWithNestedDependencies::class]
+        ];
     }
 }
