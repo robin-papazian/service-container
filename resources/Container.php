@@ -27,6 +27,10 @@ class Container
     public function getService(string $name)
     {
         if (!$this->registered($name)) {
+
+            if (class_exists($name)) {
+                return new $name;
+            }
             throw new NotRegisteredException($name);
         }
 

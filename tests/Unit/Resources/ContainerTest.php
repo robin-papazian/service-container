@@ -74,4 +74,11 @@ class ContainerTest extends TestCase
 
         $container->getService('foo');
     }
+
+    public function testInstanciateClassNotRegister()
+    {
+        $container = new Container();
+
+        $this->assertInstanceOf(Container::class, $container->getService(Container::class));
+    }
 }
