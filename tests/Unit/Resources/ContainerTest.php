@@ -10,6 +10,7 @@ require_once __DIR__ . './../../../lib/Service/ServiceWithOneDependency.php';
 require_once __DIR__ . './../../../lib/Service/ServiceMultipleDependecies.php';
 require_once __DIR__ . './../../../lib/Service/ServiceWithNestedDependencies.php';
 
+use Closure;
 use Robin\Resources\Container;
 use PHPUnit\Framework\TestCase;
 use Robin\Resources\NotRegisteredException;
@@ -93,7 +94,7 @@ class ContainerTest extends TestCase
     }
 
     /**
-     * @dataProvider myDependencies
+     * @dataProvider provideServices
      */
     public function testResolveDependenciesFromClassNotRegister($instances)
     {
@@ -101,7 +102,7 @@ class ContainerTest extends TestCase
         $this->assertInstanceOf($instances, $container->getService($instances));
     }
 
-    public function myDependencies()
+    public function provideServices()
     {
         return [
             'no constructor' => [ServiceNoConstructor::class],
@@ -109,6 +110,34 @@ class ContainerTest extends TestCase
             'one dependency' => [ServiceWithOneDependency::class],
             'multiple depemdencies' => [ServiceMultipleDependecies::class],
             'nested dependencies' => [ServiceWithNestedDependencies::class]
+        ];
+    }
+
+    /**
+     * @dataProvider provideCallables
+     */
+    public function testRegisterCallable($callable, $callableOutPut)
+    {
+        $container = new Container;
+        $container->registerCallable('someFunction', $callable);
+        $this->assertEquals($callableOutPut, $container->getService('someFunction')());
+    }
+
+    public function provideCallables()
+    {
+        return [
+            'anonymous_function' => [fn () => 'this is a function', 'this is a function'],
+            'invokable class'    => [
+                new class
+                {
+                    public function __invoke()
+                    {
+                        return 'A class That Invoke Something';
+                    }
+                },
+                'A class That Invoke Something'
+            ],
+            'Closure' => [Closure::fromCallable(fn () => 'some other function'), 'some other function']
         ];
     }
 }

@@ -81,4 +81,11 @@ class Container
 
         return $dependencies;
     }
+
+    public function registerCallable($name, $callable)
+    {
+        $this->register($name, function () use ($callable) {
+            return $callable;
+        });
+    }
 }
