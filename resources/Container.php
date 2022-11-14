@@ -20,6 +20,10 @@ class Container
         $this->services[$name] = $service;
     }
 
+    /**
+     * @param string $name
+     * @return boolean
+     */
     public function registered(string $name): bool
     {
         return array_key_exists($name, $this->services);
@@ -82,7 +86,7 @@ class Container
         return $dependencies;
     }
 
-    public function registerCallable($name, $callable)
+    public function registerCallable($name, $callable): void
     {
         $this->register($name, function () use ($callable) {
             return $callable;

@@ -4,11 +4,16 @@
 
 - Le Projet
 - Colin DeCarlo
-- Un conteneur de service ?
 - Pourquoi ce projet ?
+- Un conteneur de service ?
 
 ## Fiche technique
 
-- Le registre
-- Accéder au service
-- Résoudre les dépendences d'un service
+- Enregistrer des service
+- Accéder aux services enregistré
+- Initialiser des services non-enregistré
+- Résoudre les dépendences des services
+- Accéder au conteneur et ses services de façon statique et unique
+- Différer l'initialisation des services
+- Enregistrer des services partagés
+- Enregister des fonctions de fabrique
