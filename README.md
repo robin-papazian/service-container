@@ -15,5 +15,3 @@
 - Résoudre les dépendences des services
 - Accéder au conteneur et ses services de façon statique et unique
 - Différer l'initialisation des services
-- Enregistrer des services partagés
-- Enregister des fonctions de fabrique
