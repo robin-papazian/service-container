@@ -2,7 +2,10 @@
 
 namespace Robin\Resources;
 
+require_once './resources/SharedService.php';
+
 use ReflectionClass;
+use Robin\Resources\SharedService;
 
 class Container
 {
@@ -40,9 +43,23 @@ class Container
             throw new NotRegisteredException($name);
         }
 
-        $anonymousFunction = $this->services[$name];
-        if (is_callable($anonymousFunction)) {
-            return $anonymousFunction($this);
+        $service = $this->services[$name];
+
+        if ($service instanceof SharedService) {
+
+            $sharedService = $service->sharedService;
+
+            if (is_callable($sharedService)) {
+                $sharedService = $sharedService($this);
+            }
+
+            $this->register($name, $sharedService);
+
+            return $sharedService;
+        }
+
+        if (is_callable($service)) {
+            return $service($this);
         }
 
         return $this->services[$name];
@@ -91,5 +108,10 @@ class Container
         $this->register($name, function () use ($callable) {
             return $callable;
         });
+    }
+
+    public function registerShared($name, $sharedService)
+    {
+        $this->register($name, new SharedService($name, $sharedService));
     }
 }

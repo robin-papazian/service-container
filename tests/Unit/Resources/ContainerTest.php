@@ -140,4 +140,12 @@ class ContainerTest extends TestCase
             'Closure' => [Closure::fromCallable(fn () => 'some other function'), 'some other function']
         ];
     }
+
+    public function testRegisterShared()
+    {
+        $container = new Container;
+        $container->registerShared(ServiceNoConstructor::class, fn () => new ServiceNoConstructor);
+        $this->assertInstanceOf(ServiceNoConstructor::class, $container->getService(ServiceNoConstructor::class));
+        $this->assertSame($container->getService(ServiceNoConstructor::class), $container->getService(ServiceNoConstructor::class));
+    }
 }
