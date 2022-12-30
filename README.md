@@ -1,9 +1,10 @@
 # Table of contents
 
 1. [Introduction](#introduction)
-2. [What is dependency injection](#dependency-injection)
-3. [What is a dependency injection container](#container)
-4. [Which problems it try to solve](#problems)
+2. [What is a dependency injection container](#container)
+3. [Which problems it try to solve](#problems)
+4. [Concepts involved in this project](#concepts)
+   1. [What is dependency injection](#dependency-injection)
 
 <a name="introduction"></a>
 
@@ -13,13 +14,39 @@ This is a small dependency injection container built from scratch for educationa
 
 Please be aware that I do not have yet a strong background in software development. This documentation refers only to my personal understanding and is subject to errors. I hope you will pick up something useful from this.
 
+<a name="container"></a>
+
+## What is a dependency injection container
+
+A dependency injection container is not business domain related. It rather serves as a mechanism for the environment in which your application will evolve. It is an object that relies on [**dependecy injection**](#dependency-injection) to centralize all your other objects with-in it.
+
+<a name="problems"></a>
+
+## Which problems can be solved with the container
+
+You and your team developed classes that are well defined and you are using [**dependecy injection**](#dependency-injection) to connect them together. So you constantly need to manually inject instance of your dependencies into your objects.
+
+But imagine the application getting bigger and hundreds of objects are working together, the things may get complex. How do you manage all the objects and the subsystems ?
+
+The dependency injection container allow you to :
+
+- Register all of your objects in it.
+- Call your objects from it even if they are **not registered** with-in it
+- Build the dependencies of your objects for you ([**Autowiring**]())
+- Your objects would be instanciated when you call them not during registration ([**LazyLoading**]())
+- Sometime you would like to have a single instance of an object even if you call it multiple time, like a database connection ([**Singleton**]())
+
+<a name="concepts"></a>
+
+## Concepts involved in this project
+
 <a name="dependency-injection"></a>
 
-## What is dependency injection
+### **Dependency Injection**
 
 When we talk about class, a dependency is a term that refers to an object which another object depends on to carry its work.
 
-Making an object delegate to others objects a task that is out of its scope is good sign that you are honoring the Single Responsibility Principle.
+Making an object delegate to others objects a task that is out of its scope is good sign that you are honoring the **Single Responsibility Principle**.
 The degree of dependence between this object is call coupling.
 
 First illustration with inheritance :
@@ -75,14 +102,6 @@ $human = new Human($biped);
 - You have more flexibility, you can change the dependency it is not hardcoded in the class
 - Both classes can be tested independently
 
-<a name="container"></a>
+### **Autowiring**
 
-## What is a dependency injection container
-
-A dependency injection container is not business domain related. It rather serves as a mechanism for the environment in which your application will evolve. You can find them in frameworks.
-
-<a name="problems"></a>
-
-## Which problems can be solved with the container
-
-You and your team developed classes that are well defined and you are using [**dependecy injection**](#dependency-injection) to connect them together. But the application gets bigger and you need to keep track of all the subsystems plus you also need to handle their dependencies.
+Just above to use Human you had to first instanciate Biped and pass it to Human as a parameter. Autowiring is the same process that happen automatically behind the scene. The container will discover the dependencies and passed them to your object
