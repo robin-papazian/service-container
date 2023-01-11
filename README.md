@@ -5,6 +5,7 @@
 3. [Which problems it try to solve](#problems)
 4. [Concepts involved in this project](#concepts)
    1. [What is dependency injection](#dependency-injection)
+   2. [Autowiring](#autowiring)
 
 <a name="introduction"></a>
 
@@ -30,10 +31,9 @@ But imagine the application getting bigger and hundreds of objects are working t
 
 The dependency injection container allow you to :
 
-- Register all of your objects in it.
+- Register all of your services with-in it been functions or objects.
 - Call your objects from it even if they are **not registered** with-in it
-- Build the dependencies of your objects for you ([**Autowiring**]())
-- Your objects would be instanciated when you call them not during registration ([**LazyLoading**]())
+- Build the dependencies of your objects for you ([**Autowiring**](#autowiring))
 - Sometime you would like to have a single instance of an object even if you call it multiple time, like a database connection ([**Singleton**]())
 
 <a name="concepts"></a>
@@ -101,6 +101,8 @@ $human = new Human($biped);
 - Now the code is more readable, the dependency is not hidden
 - You have more flexibility, you can change the dependency it is not hardcoded in the class
 - Both classes can be tested independently
+
+<a name="autowiring"></a>
 
 ### **Autowiring**
 
